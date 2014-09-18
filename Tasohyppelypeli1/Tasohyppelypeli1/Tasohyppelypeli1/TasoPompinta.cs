@@ -14,9 +14,8 @@ public class Tasohyppelypeli1 : PhysicsGame
 
     PlatformCharacter pelaaja1;
 
-    
 
-    Image pelaajanKuva = LoadImage("norsu");
+    Image pelaajanKuva = LoadImage("Ukko");
     Image tahtiKuva = LoadImage("tahti");
 
     SoundEffect maaliAani = LoadSoundEffect("maali");
@@ -29,14 +28,8 @@ public class Tasohyppelypeli1 : PhysicsGame
         LisaaNappaimet();
 
         Camera.Follow(pelaaja1);
-        Camera.ZoomFactor = 1.2;
+        Camera.ZoomFactor = 1.5;
         Camera.StayInLevel = true;
-
-
-        PhysicsObject kuutio = new PhysicsObject(40.0, 40.0);
-        Add(kuutio);
-        kuutio.Color = Color.Brown;
-        kuutio.Restitution = 0.5;
 
     }
 
@@ -46,16 +39,18 @@ public class Tasohyppelypeli1 : PhysicsGame
         kentta.SetTileMethod('#', LisaaTaso);
         kentta.SetTileMethod('*', LisaaTahti);
         kentta.SetTileMethod('N', LisaaPelaaja);
+        kentta.SetTileMethod('B', LuoLaatikko);
+        kentta.SetTileMethod('O', LuoPallo);
         kentta.Execute(RUUDUN_KOKO, RUUDUN_KOKO);
         Level.CreateBorders();
-        Level.Background.CreateGradient(Color.White, Color.SkyBlue);
+        Level.Background.CreateGradient(Color.LightBlue, Color.Black);
     }
 
     void LisaaTaso(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject taso = PhysicsObject.CreateStaticObject(leveys, korkeus);
         taso.Position = paikka;
-        taso.Color = Color.Green;
+        taso.Color = Color.DarkGreen;
         Add(taso);
     }
 
@@ -73,10 +68,35 @@ public class Tasohyppelypeli1 : PhysicsGame
     {
         pelaaja1 = new PlatformCharacter(leveys, korkeus);
         pelaaja1.Position = paikka;
-        pelaaja1.Mass = 4.0;
+        pelaaja1.Mass = 6.0;
         pelaaja1.Image = pelaajanKuva;
         AddCollisionHandler(pelaaja1, "tahti", TormaaTahteen);
         Add(pelaaja1);
+    }
+
+    void LuoLaatikko(Vector paikka, double leveys, double korkeus)
+    {
+        PhysicsObject Laatikko = new PhysicsObject(leveys, korkeus);
+        Add(Laatikko);
+        Laatikko.Position = paikka;
+        Laatikko.Color = Color.Brown;
+        Laatikko.Restitution = 0.2;
+    }
+
+    void LuoPallo(Vector paikka, double leveys, double korkeus)
+    {
+        PhysicsObject Pallo = new PhysicsObject(leveys, korkeus);
+        Add(Pallo);
+        Pallo.Shape = Shape.Circle;
+        Pallo.Position = paikka;
+        Pallo.Color = Color.Red;
+        Pallo.Restitution = 2.0; 
+        
+    }
+
+    void Vektori()
+    {
+        
     }
 
     void LisaaNappaimet()
@@ -115,4 +135,5 @@ public class Tasohyppelypeli1 : PhysicsGame
         MessageDisplay.Add("Keräsit tähden!");
         tahti.Destroy();
     }
+
 }
