@@ -37,6 +37,7 @@ public class Tasohyppelypeli1 : PhysicsGame
     {
         TileMap kentta = TileMap.FromLevelAsset("kentta1");
         kentta.SetTileMethod('#', LisaaTaso);
+        kentta.SetTileMethod('=', LisaaTaso2);
         kentta.SetTileMethod('*', LisaaTahti);
         kentta.SetTileMethod('N', LisaaPelaaja);
         kentta.SetTileMethod('B', LuoLaatikko);
@@ -90,13 +91,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         Pallo.Shape = Shape.Circle;
         Pallo.Position = paikka;
         Pallo.Color = Color.Red;
-        Pallo.Restitution = 2.0; 
-        
-    }
-
-    void Vektori()
-    {
-        
+        Pallo.Restitution = 2.0;
     }
 
     void LisaaNappaimet()
@@ -122,7 +117,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         hahmo.Walk(nopeus);
     }
 
-   
+
 
     void Hyppaa(PlatformCharacter hahmo, double nopeus)
     {
@@ -136,4 +131,11 @@ public class Tasohyppelypeli1 : PhysicsGame
         tahti.Destroy();
     }
 
+    void LisaaTaso2(Vector paikka, double leveys, double korkeus)
+    {
+        PhysicsObject taso2 = PhysicsObject.CreateStaticObject(leveys, korkeus);
+        taso2.Position = paikka;
+        taso2.Color = Color.Black;
+        Add(taso2);
+    }
 }
