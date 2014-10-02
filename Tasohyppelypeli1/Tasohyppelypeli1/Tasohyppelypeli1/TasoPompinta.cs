@@ -12,20 +12,29 @@ public class Tasohyppelypeli1 : PhysicsGame
     const double hyppyNopeus = 750;
     const int RUUDUN_KOKO = 40;
 
-    PlatformCharacter pelaaja1;
+    static PlatformCharacter pelaaja1;
+    PlatformCharacter Ninja;
 
+    FollowerBrain NinjaAivot;
+
+    IntMeter Pisteet;
 
     Image pelaajanKuva = LoadImage("Ukko");
+    Image NinjanKuva = LoadImage("Ukko");
     Image tahtiKuva = LoadImage("tahti");
 
     SoundEffect maaliAani = LoadSoundEffect("maali");
 
     public override void Begin()
     {
+        Image pelaajanKuva = LoadImage("Ukko");
         Gravity = new Vector(0, -1000);
 
         LuoKentta();
         LisaaNappaimet();
+        LisaaLaskuri();
+
+        
 
         Camera.Follow(pelaaja1);
         Camera.ZoomFactor = 1.5;
@@ -39,7 +48,8 @@ public class Tasohyppelypeli1 : PhysicsGame
         kentta.SetTileMethod('#', LisaaTaso);
         kentta.SetTileMethod('=', LisaaTaso2);
         kentta.SetTileMethod('*', LisaaTahti);
-        kentta.SetTileMethod('N', LisaaPelaaja);
+        kentta.SetTileMethod('P', LisaaPelaaja);
+        kentta.SetTileMethod('N', LisaaNinja);
         kentta.SetTileMethod('B', LuoLaatikko);
         kentta.SetTileMethod('O', LuoPallo);
         kentta.Execute(RUUDUN_KOKO, RUUDUN_KOKO);
@@ -72,8 +82,26 @@ public class Tasohyppelypeli1 : PhysicsGame
         pelaaja1.Mass = 6.0;
         pelaaja1.Image = pelaajanKuva;
         AddCollisionHandler(pelaaja1, "tahti", TormaaTahteen);
+        AddCollisionHandler<PlatformCharacter,PlatformCharacter>(pelaaja1, "Ninja", TormaaNinjaan);
         Add(pelaaja1);
     }
+
+    void LisaaNinja(Vector paikka, double leveys, double korkeus)
+    {
+        Ninja = new PlatformCharacter(leveys, korkeus);
+        Ninja.Position = paikka;
+        Ninja.Mass = 5.0;
+        Ninja.Image = NinjanKuva;
+        Ninja.Tag = "Ninja";
+        Add(Ninja);
+        NinjaAivot = new FollowerBrain(pelaaja1);
+        NinjaAivot.Speed = 900;
+        NinjaAivot.DistanceFar = 600;
+        NinjaAivot.Active = true;
+        Ninja.Brain = NinjaAivot;
+    }
+
+
 
     void LuoLaatikko(Vector paikka, double leveys, double korkeus)
     {
@@ -82,6 +110,26 @@ public class Tasohyppelypeli1 : PhysicsGame
         Laatikko.Position = paikka;
         Laatikko.Color = Color.Brown;
         Laatikko.Restitution = 0.2;
+    }
+
+    void LisaaLaskuri()
+    {
+        Pisteet = LuoPisteLaskuri(Screen.Left + 100.0, Screen.Top - 100.0);
+    }
+
+    IntMeter LuoPisteLaskuri(double x,double y)
+    {
+        IntMeter laskuri = new IntMeter(0);
+        laskuri.MaxValue = 100;
+
+        Label naytto = new Label();
+        naytto.BindTo(laskuri);
+        naytto.X = x;
+        naytto.Y = y;
+        naytto.TextColor = Color.White;
+        Add(naytto);
+
+        return laskuri;
     }
 
     void LuoPallo(Vector paikka, double leveys, double korkeus)
@@ -124,11 +172,17 @@ public class Tasohyppelypeli1 : PhysicsGame
         hahmo.Jump(nopeus);
     }
 
+    void TormaaNinjaan(PlatformCharacter hahmo, PlatformCharacter Ninja)
+    {
+        hahmo.Destroy();
+        ClearAll();
+        Begin();
+    }
+    
     void TormaaTahteen(PhysicsObject hahmo, PhysicsObject tahti)
     {
-        maaliAani.Play();
-        MessageDisplay.Add("Keräsit tähden!");
-        tahti.Destroy();
+       Pisteet.Value += 1;
+       tahti.Destroy();
     }
 
     void LisaaTaso2(Vector paikka, double leveys, double korkeus)
