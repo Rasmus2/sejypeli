@@ -20,7 +20,7 @@ public class Tasohyppelypeli1 : PhysicsGame
     IntMeter Pisteet;
 
     Image pelaajanKuva = LoadImage("Ukko");
-    Image NinjanKuva = LoadImage("Ukko");
+    Image NinjanKuva = LoadImage("Ninja");
     Image tahtiKuva = LoadImage("tahti");
 
     SoundEffect maaliAani = LoadSoundEffect("maali");
@@ -46,12 +46,14 @@ public class Tasohyppelypeli1 : PhysicsGame
     {
         TileMap kentta = TileMap.FromLevelAsset("kentta1");
         kentta.SetTileMethod('#', LisaaTaso);
+        kentta.SetTileMethod('T', LisaaTukki);
         kentta.SetTileMethod('=', LisaaTaso2);
+        kentta.SetTileMethod('_', LisaaTaso3);
         kentta.SetTileMethod('*', LisaaTahti);
         kentta.SetTileMethod('P', LisaaPelaaja);
         kentta.SetTileMethod('N', LisaaNinja);
         kentta.SetTileMethod('B', LuoLaatikko);
-        kentta.SetTileMethod('O', LuoPallo);
+        kentta.SetTileMethod('O', LisaaLehti);
         kentta.Execute(RUUDUN_KOKO, RUUDUN_KOKO);
         Level.CreateBorders();
         Level.Background.CreateGradient(Color.LightBlue, Color.Black);
@@ -95,8 +97,8 @@ public class Tasohyppelypeli1 : PhysicsGame
         Ninja.Tag = "Ninja";
         Add(Ninja);
         NinjaAivot = new FollowerBrain(pelaaja1);
-        NinjaAivot.Speed = 900;
-        NinjaAivot.DistanceFar = 600;
+        NinjaAivot.Speed = 400;
+        NinjaAivot.DistanceFar = 400;
         NinjaAivot.Active = true;
         Ninja.Brain = NinjaAivot;
     }
@@ -132,16 +134,6 @@ public class Tasohyppelypeli1 : PhysicsGame
         return laskuri;
     }
 
-    void LuoPallo(Vector paikka, double leveys, double korkeus)
-    {
-        PhysicsObject Pallo = new PhysicsObject(leveys, korkeus);
-        Add(Pallo);
-        Pallo.Shape = Shape.Circle;
-        Pallo.Position = paikka;
-        Pallo.Color = Color.Red;
-        Pallo.Restitution = 2.0;
-    }
-
     void LisaaNappaimet()
     {
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
@@ -150,6 +142,8 @@ public class Tasohyppelypeli1 : PhysicsGame
         Keyboard.Listen(Key.Left, ButtonState.Down, Liikuta, "Liikkuu vasemmalle", pelaaja1, -nopeus);
         Keyboard.Listen(Key.Right, ButtonState.Down, Liikuta, "Liikkuu vasemmalle", pelaaja1, nopeus);
         Keyboard.Listen(Key.Up, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja1, hyppyNopeus);
+
+        Keyboard.Listen(Key.R, ButtonState.Pressed, retry, "Aloita alusta");
 
         ControllerOne.Listen(Button.Back, ButtonState.Pressed, Exit, "Poistu pelistä");
 
@@ -172,6 +166,12 @@ public class Tasohyppelypeli1 : PhysicsGame
         hahmo.Jump(nopeus);
     }
 
+    void retry()
+    {
+        ClearAll();
+        Begin();
+    }
+
     void TormaaNinjaan(PlatformCharacter hahmo, PlatformCharacter Ninja)
     {
         hahmo.Destroy();
@@ -191,5 +191,34 @@ public class Tasohyppelypeli1 : PhysicsGame
         taso2.Position = paikka;
         taso2.Color = Color.Black;
         Add(taso2);
+    }
+
+    void LisaaTaso3(Vector paikka, double leveys, double korkeus)
+    {
+        PhysicsObject taso3 = PhysicsObject.CreateStaticObject(leveys, korkeus/2);
+        Vector paikka2 = new Vector(paikka.X, paikka.Y - 10);
+        taso3.Position = paikka2;
+        taso3.Color = Color.DarkGreen;
+        Add(taso3);
+
+    }
+
+    void LisaaTukki(Vector paikka, double leveys, double korkeus)
+    {
+        PhysicsObject Tukki = PhysicsObject.CreateStaticObject(leveys, korkeus);
+        Tukki.Position = paikka;
+        Tukki.Color = Color.DarkBrown;
+        Tukki.IgnoresCollisionResponse = true;
+        Add(Tukki);
+        
+    }
+
+    void LisaaLehti(Vector paikka, double leveys, double korkeus)
+    {
+        PhysicsObject Lehti = PhysicsObject.CreateStaticObject(leveys, korkeus);
+        Lehti.Position = paikka;
+        Lehti.Color = Color.Green;
+        Lehti.IgnoresCollisionResponse = true;
+        Add(Lehti);
     }
 }
