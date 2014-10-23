@@ -22,6 +22,7 @@ public class Tasohyppelypeli1 : PhysicsGame
     Image pelaajanKuva = LoadImage("Ukko");
     Image NinjanKuva = LoadImage("Ninja");
     Image tahtiKuva = LoadImage("tahti");
+    Image tiiliKuva = LoadImage("Tiili");
 
     SoundEffect maaliAani = LoadSoundEffect("maali");
 
@@ -42,6 +43,8 @@ public class Tasohyppelypeli1 : PhysicsGame
 
     }
 
+
+
     void LuoKentta()
     {
         TileMap kentta = TileMap.FromLevelAsset("kentta1");
@@ -58,6 +61,9 @@ public class Tasohyppelypeli1 : PhysicsGame
         Level.CreateBorders();
         Level.Background.CreateGradient(Color.LightBlue, Color.Black);
     }
+
+
+
 
     void LisaaTaso(Vector paikka, double leveys, double korkeus)
     {
@@ -98,7 +104,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         Add(Ninja);
         NinjaAivot = new FollowerBrain(pelaaja1);
         NinjaAivot.Speed = 400;
-        NinjaAivot.DistanceFar = 400;
+        NinjaAivot.DistanceFar = 500;
         NinjaAivot.Active = true;
         Ninja.Brain = NinjaAivot;
     }
@@ -131,6 +137,8 @@ public class Tasohyppelypeli1 : PhysicsGame
         naytto.TextColor = Color.White;
         Add(naytto);
 
+        
+       
         return laskuri;
     }
 
@@ -159,7 +167,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         hahmo.Walk(nopeus);
     }
 
-
+    
 
     void Hyppaa(PlatformCharacter hahmo, double nopeus)
     {
@@ -178,18 +186,27 @@ public class Tasohyppelypeli1 : PhysicsGame
         ClearAll();
         Begin();
     }
+
+   
     
     void TormaaTahteen(PhysicsObject hahmo, PhysicsObject tahti)
     {
        Pisteet.Value += 1;
        tahti.Destroy();
+       if (Pisteet == 15)
+       {
+           ClearAll();
+           MessageDisplay.Add("Voitit pelin! Peli ohi!");
+           LisaaNappaimet();
+       }
     }
 
     void LisaaTaso2(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject taso2 = PhysicsObject.CreateStaticObject(leveys, korkeus);
         taso2.Position = paikka;
-        taso2.Color = Color.Black;
+        taso2.Image = tiiliKuva;
+        taso2.Color = Color.Red;
         Add(taso2);
     }
 
