@@ -21,8 +21,13 @@ public class Tasohyppelypeli1 : PhysicsGame
 
     Image pelaajanKuva = LoadImage("Ukko");
     Image NinjanKuva = LoadImage("Ninja");
-    Image tahtiKuva = LoadImage("tahti");
+    Image PurilainenKuva = LoadImage("Purilainen");
     Image tiiliKuva = LoadImage("Tiili");
+    Image tukkiKuva = LoadImage("tukki");
+    Image LaatikkoKuva = LoadImage("Laatikko");
+    Image LehtiKuva = LoadImage("Lehti");
+    Image NurmiKuva = LoadImage("Nurmi");
+    Image TaustaKuva = LoadImage("Tausta");
 
     SoundEffect maaliAani = LoadSoundEffect("maali");
 
@@ -35,15 +40,13 @@ public class Tasohyppelypeli1 : PhysicsGame
         LisaaNappaimet();
         LisaaLaskuri();
 
-        
-
         Camera.Follow(pelaaja1);
         Camera.ZoomFactor = 1.5;
         Camera.StayInLevel = true;
 
     }
-
-
+    
+   
 
     void LuoKentta()
     {
@@ -59,16 +62,26 @@ public class Tasohyppelypeli1 : PhysicsGame
         kentta.SetTileMethod('O', LisaaLehti);
         kentta.Execute(RUUDUN_KOKO, RUUDUN_KOKO);
         Level.CreateBorders();
-        Level.Background.CreateGradient(Color.LightBlue, Color.Black);
+        //Level.Background.CreateGradient(Color.LightBlue, Color.Black);
+        Level.Background.Image = TaustaKuva;
+        
+        GameObject Tausta = new GameObject(Screen.Width, Screen.Height);
+        {
+            Tausta.Image = TaustaKuva;
+            Add(Tausta, -3);
+            Layers[-3].RelativeTransition = new Vector(0.5, 0.5);
+        }
+        Level.Background.FitToLevel();
+
     }
 
-
-
+   
 
     void LisaaTaso(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject taso = PhysicsObject.CreateStaticObject(leveys, korkeus);
         taso.Position = paikka;
+        taso.Image = NurmiKuva;
         taso.Color = Color.DarkGreen;
         Add(taso);
     }
@@ -78,7 +91,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         PhysicsObject tahti = PhysicsObject.CreateStaticObject(leveys, korkeus);
         tahti.IgnoresCollisionResponse = true;
         tahti.Position = paikka;
-        tahti.Image = tahtiKuva;
+        tahti.Image = PurilainenKuva;
         tahti.Tag = "tahti";
         Add(tahti);
     }
@@ -117,6 +130,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         Add(Laatikko);
         Laatikko.Position = paikka;
         Laatikko.Color = Color.Brown;
+        Laatikko.Image = LaatikkoKuva;
         Laatikko.Restitution = 0.2;
     }
 
@@ -216,6 +230,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         Vector paikka2 = new Vector(paikka.X, paikka.Y - 10);
         taso3.Position = paikka2;
         taso3.Color = Color.DarkGreen;
+        taso3.Image = NurmiKuva;
         Add(taso3);
 
     }
@@ -225,6 +240,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         PhysicsObject Tukki = PhysicsObject.CreateStaticObject(leveys, korkeus);
         Tukki.Position = paikka;
         Tukki.Color = Color.DarkBrown;
+        Tukki.Image = tukkiKuva;
         Tukki.IgnoresCollisionResponse = true;
         Add(Tukki);
         
@@ -235,6 +251,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         PhysicsObject Lehti = PhysicsObject.CreateStaticObject(leveys, korkeus);
         Lehti.Position = paikka;
         Lehti.Color = Color.Green;
+        Lehti.Image = LehtiKuva;
         Lehti.IgnoresCollisionResponse = true;
         Add(Lehti);
     }
