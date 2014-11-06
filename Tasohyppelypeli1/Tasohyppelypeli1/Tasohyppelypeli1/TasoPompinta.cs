@@ -31,6 +31,7 @@ public class Tasohyppelypeli1 : PhysicsGame
 
     SoundEffect maaliAani = LoadSoundEffect("maali");
 
+    //public override void Begin()
     public override void Begin()
     {
         Image pelaajanKuva = LoadImage("Ukko");
@@ -43,9 +44,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         Camera.Follow(pelaaja1);
         Camera.ZoomFactor = 1.5;
         Camera.StayInLevel = true;
-
     }
-    
    
 
     void LuoKentta()
@@ -69,10 +68,20 @@ public class Tasohyppelypeli1 : PhysicsGame
         {
             Tausta.Image = TaustaKuva;
             Add(Tausta, -3);
-            Layers[-3].RelativeTransition = new Vector(0.5, 0.5);
+            Layers[-3].RelativeTransition = new Vector(0.5, 0.3);
         }
         Level.Background.FitToLevel();
 
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
+        MessageDisplay.Add("Kerää 15 burilaista");
     }
 
    
@@ -104,7 +113,9 @@ public class Tasohyppelypeli1 : PhysicsGame
         pelaaja1.Image = pelaajanKuva;
         AddCollisionHandler(pelaaja1, "tahti", TormaaTahteen);
         AddCollisionHandler<PlatformCharacter,PlatformCharacter>(pelaaja1, "Ninja", TormaaNinjaan);
+        
         Add(pelaaja1);
+
     }
 
     void LisaaNinja(Vector paikka, double leveys, double korkeus)
@@ -242,7 +253,7 @@ public class Tasohyppelypeli1 : PhysicsGame
         Tukki.Color = Color.DarkBrown;
         Tukki.Image = tukkiKuva;
         Tukki.IgnoresCollisionResponse = true;
-        Add(Tukki);
+        Add(Tukki, -1);
         
     }
 
@@ -253,6 +264,6 @@ public class Tasohyppelypeli1 : PhysicsGame
         Lehti.Color = Color.Green;
         Lehti.Image = LehtiKuva;
         Lehti.IgnoresCollisionResponse = true;
-        Add(Lehti);
+        Add(Lehti, -1);
     }
 }
